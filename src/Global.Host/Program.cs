@@ -13,10 +13,19 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Countries", Version = "v1" });
 });
-builder.Services.AddDbContext<GlobalDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("Default"),
-        sqlOptions => sqlOptions.EnableRetryOnFailure()));
+
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddDbContext<GlobalDbContext>(options =>
+        options.UseInMemoryDatabase("TestingDb"));
+}
+else
+{
+    builder.Services.AddDbContext<GlobalDbContext>(options =>
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString("Default"),
+            sqlOptions => sqlOptions.EnableRetryOnFailure()));
+}
 builder.Services.AddScoped<ICountryAccess, CountryAccess>();
 builder.Services.AddScoped<ICountryManager, CountryManager>();
 builder.Services.AddScoped<ICityAccess, CityAccess>();
@@ -27,7 +36,14 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<GlobalDbContext>();
-    await db.Database.MigrateAsync();
+    if (db.Database.IsRelational())
+    {
+        await db.Database.MigrateAsync();
+    }
+    else
+    {
+        await db.Database.EnsureCreatedAsync();
+    }
 }
 
 if (app.Environment.IsDevelopment())
@@ -43,3 +59,5 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
