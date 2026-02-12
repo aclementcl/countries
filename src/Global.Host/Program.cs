@@ -1,6 +1,8 @@
+using Global.Access.Data;
 using Global.Access.Repositories;
 using Global.Manager.Interfaces;
 using Global.Manager.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,10 +13,20 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Countries", Version = "v1" });
 });
+builder.Services.AddDbContext<GlobalDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("Default"),
+        sqlOptions => sqlOptions.EnableRetryOnFailure()));
 builder.Services.AddScoped<ICountryAccess, CountryAccess>();
 builder.Services.AddScoped<ICountryManager, CountryManager>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<GlobalDbContext>();
+    await db.Database.MigrateAsync();
+}
 
 if (app.Environment.IsDevelopment())
 {

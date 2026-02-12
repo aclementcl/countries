@@ -1,18 +1,24 @@
+using Global.Access.Data;
 using Global.Manager.Entities;
 using Global.Manager.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Global.Access.Repositories;
 
 public class CountryAccess : ICountryAccess
 {
-    private static readonly IReadOnlyList<Country> Countries =
-    [
-        new Country { Id = 1, Name = "Chile" },
-        new Country { Id = 2, Name = "Argentina" }
-    ];
+    private readonly GlobalDbContext _dbContext;
 
-    public Task<IReadOnlyList<Country>> GetAll()
+    public CountryAccess(GlobalDbContext dbContext)
     {
-        return Task.FromResult(Countries);
+        _dbContext = dbContext;
+    }
+
+    public async Task<IReadOnlyList<Country>> GetAll()
+    {
+        return await _dbContext.Countries
+            .AsNoTracking()
+            .OrderBy(country => country.Id)
+            .ToListAsync();
     }
 }
