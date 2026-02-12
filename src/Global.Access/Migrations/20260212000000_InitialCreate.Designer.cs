@@ -40,11 +40,21 @@ partial class InitialCreate
                 new
                 {
                     Id = 1,
-                    Name = "Chile"
+                    Name = "Paraguay"
                 },
                 new
                 {
                     Id = 2,
+                    Name = "United States"
+                },
+                new
+                {
+                    Id = 3,
+                    Name = "Chile"
+                },
+                new
+                {
+                    Id = 4,
                     Name = "Argentina"
                 });
         });

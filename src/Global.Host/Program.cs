@@ -19,6 +19,8 @@ builder.Services.AddDbContext<GlobalDbContext>(options =>
         sqlOptions => sqlOptions.EnableRetryOnFailure()));
 builder.Services.AddScoped<ICountryAccess, CountryAccess>();
 builder.Services.AddScoped<ICountryManager, CountryManager>();
+builder.Services.AddScoped<ICityAccess, CityAccess>();
+builder.Services.AddScoped<ICityManager, CityManager>();
 
 var app = builder.Build();
 

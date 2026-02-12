@@ -32,8 +32,10 @@ public partial class InitialCreate : Migration
             columns: new[] { "Id", "Name" },
             values: new object[,]
             {
-                { 1, "Chile" },
-                { 2, "Argentina" }
+                { 1, "Paraguay" },
+                { 2, "United States" },
+                { 3, "Chile" },
+                { 4, "Argentina" }
             });
         migrationBuilder.Sql("SET IDENTITY_INSERT [dbo].[Countries] OFF;");
     }
