@@ -1,12 +1,14 @@
 using Global.Manager.Dtos;
 using Global.Manager.Entities;
 using Global.Manager.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Global.Host.Controllers;
 
 [ApiController]
 [Route("api/v1/countries")]
+[Authorize]
 
 public class CountriesController : ControllerBase
 {

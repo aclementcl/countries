@@ -3,6 +3,7 @@ using Global.Manager.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -17,8 +18,26 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         builder.UseEnvironment("Testing");
         builder.ConfigureServices(services =>
         {
-            var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<GlobalDbContext>));
-            if (descriptor is not null)
+            var dbContextOptions = services
+                .Where(d => d.ServiceType == typeof(DbContextOptions<GlobalDbContext>))
+                .ToList();
+            foreach (var descriptor in dbContextOptions)
+            {
+                services.Remove(descriptor);
+            }
+
+            var dbContextConfigs = services
+                .Where(d => d.ServiceType == typeof(IDbContextOptionsConfiguration<GlobalDbContext>))
+                .ToList();
+            foreach (var descriptor in dbContextConfigs)
+            {
+                services.Remove(descriptor);
+            }
+
+            var dbContexts = services
+                .Where(d => d.ServiceType == typeof(GlobalDbContext))
+                .ToList();
+            foreach (var descriptor in dbContexts)
             {
                 services.Remove(descriptor);
             }
