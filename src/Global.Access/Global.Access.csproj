@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Country.Domain\Country.Domain.csproj" />
+    <ProjectReference Include="..\Global.Manager\Global.Manager.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

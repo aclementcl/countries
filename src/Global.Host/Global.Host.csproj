@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Country.Manager\Country.Manager.csproj" />
-    <ProjectReference Include="..\Country.Access\Country.Access.csproj" />
+    <ProjectReference Include="..\Global.Manager\Global.Manager.csproj" />
+    <ProjectReference Include="..\Global.Access\Global.Access.csproj" />
   </ItemGroup>
 
 </Project>
