@@ -85,6 +85,32 @@ builder.Services.AddScoped<ICityManager, CityManager>();
 
 var app = builder.Build();
 
+var appLogger = app.Services.GetRequiredService<ILoggerFactory>().CreateLogger("Global.Host");
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var exception = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()?.Error;
+        if (exception is not null)
+        {
+            appLogger.LogError(exception, "Unhandled exception.");
+        }
+
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/problem+json";
+
+        var problem = new ProblemDetails
+        {
+            Title = "Unexpected error",
+            Status = StatusCodes.Status500InternalServerError,
+            Detail = app.Environment.IsDevelopment() ? exception?.Message : "An unexpected error occurred."
+        };
+
+        await context.Response.WriteAsJsonAsync(problem);
+    });
+});
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<GlobalDbContext>();
