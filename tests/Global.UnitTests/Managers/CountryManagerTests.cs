@@ -1,6 +1,7 @@
 using Global.Manager.Entities;
 using Global.Manager.Interfaces;
 using Global.Manager.Services;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using Xunit;
 
@@ -19,7 +20,8 @@ public class CountryManagerTests
         };
         access.Setup(a => a.GetAll()).ReturnsAsync(expected);
 
-        var manager = new CountryManager(access.Object);
+        var cache = new MemoryCache(new MemoryCacheOptions());
+        var manager = new CountryManager(access.Object, cache);
 
         var result = await manager.GetAll();
 
@@ -35,7 +37,8 @@ public class CountryManagerTests
         var created = new Country { Id = 10, Name = "Peru" };
         access.Setup(a => a.Create(input)).ReturnsAsync(created);
 
-        var manager = new CountryManager(access.Object);
+        var cache = new MemoryCache(new MemoryCacheOptions());
+        var manager = new CountryManager(access.Object, cache);
 
         var result = await manager.Create(input);
 

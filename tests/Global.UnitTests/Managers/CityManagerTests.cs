@@ -1,6 +1,7 @@
 using Global.Manager.Entities;
 using Global.Manager.Interfaces;
 using Global.Manager.Services;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using Xunit;
 
@@ -15,7 +16,8 @@ public class CityManagerTests
         var expected = new City { Id = 5, Name = "Santiago", CountryId = 3 };
         access.Setup(a => a.GetById(5)).ReturnsAsync(expected);
 
-        var manager = new CityManager(access.Object);
+        var cache = new MemoryCache(new MemoryCacheOptions());
+        var manager = new CityManager(access.Object, cache);
 
         var result = await manager.GetById(5);
 
@@ -30,7 +32,8 @@ public class CityManagerTests
         var access = new Mock<ICityAccess>();
         access.Setup(a => a.Delete(7)).ReturnsAsync(true);
 
-        var manager = new CityManager(access.Object);
+        var cache = new MemoryCache(new MemoryCacheOptions());
+        var manager = new CityManager(access.Object, cache);
 
         var result = await manager.Delete(7);
 
