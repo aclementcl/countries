@@ -1,6 +1,6 @@
 services:
   api:
-    image: global-api
+    image: country-api
     container_name: global_api
     build:
       context: .
