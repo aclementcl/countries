@@ -23,6 +23,8 @@ public class GlobalDbContext : DbContext
                 .IsRequired();
 
             entity.HasData(
+                new Country { Id = 1, Name = "Paraguay" },
+                new Country { Id = 1, Name = "Estados Unidos" },
                 new Country { Id = 1, Name = "Chile" },
                 new Country { Id = 2, Name = "Argentina" }
             );
