@@ -4,6 +4,7 @@ using Global.Host.Auth;
 using Global.Manager.Interfaces;
 using Global.Manager.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
