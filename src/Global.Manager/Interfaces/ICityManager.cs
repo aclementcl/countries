@@ -6,6 +6,7 @@ public interface ICityManager
 {
     Task<IReadOnlyList<City>> GetAll();
     Task<City?> GetById(int id);
+    Task<IReadOnlyList<City>> GetByCountryId(int countryId);
     Task<City> Create(City city);
     Task<bool> Update(int id, City city);
     Task<bool> Delete(int id);

@@ -48,6 +48,23 @@ public class CityAccess : ICityAccess
         }
     }
 
+    public async Task<IReadOnlyList<City>> GetByCountryId(int countryId)
+    {
+        try
+        {
+            return await _dbContext.Cities
+                .AsNoTracking()
+                .Where(city => city.CountryId == countryId)
+                .OrderBy(city => city.Id)
+                .ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to get cities by country id {CountryId}.", countryId);
+            throw;
+        }
+    }
+
     public async Task<City> Create(City city)
     {
         try
